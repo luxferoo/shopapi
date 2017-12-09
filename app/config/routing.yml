@@ -3,6 +3,9 @@ shop:
     type:     annotation
     prefix:   /api
 
+app.swagger_ui:
+    resource: "@NelmioApiDocBundle/Resources/config/routing/swaggerui.xml"
+    prefix:   /doc
 app:
     resource: '@AppBundle/Controller/'
     type: annotation

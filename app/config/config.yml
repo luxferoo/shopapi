@@ -71,6 +71,15 @@ swiftmailer:
     password: '%mailer_password%'
     spool: { type: memory }
 
+nelmio_api_doc:
+    routes:
+        path_patterns:
+            - ^/api
+    documentation:
+            info:
+                title: Shop Api doc
+                description: List of shop api routes
+                version: 1.0.0
 lexik_jwt_authentication:
     private_key_path: "%kernel.root_dir%/../app/jwt/private.pem"
     public_key_path:  "%kernel.root_dir%/../app/jwt/public.pem"
