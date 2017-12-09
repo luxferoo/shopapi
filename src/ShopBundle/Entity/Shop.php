@@ -2,6 +2,7 @@
 
 namespace ShopBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,6 +36,18 @@ class Shop
      */
     private $image;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="UserShopPreference", mappedBy = "shop")
+     */
+
+    private $userShopPreferences;
+
+
+    public function __construct()
+    {
+        $this->userShopPreferences = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -92,6 +105,22 @@ class Shop
     public function getImage()
     {
         return $this->image;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserShopPreferences()
+    {
+        return $this->userShopPreferences;
+    }
+
+    /**
+     * @param mixed $userShopPreferences
+     */
+    public function setUserShopPreferences($userShopPreferences)
+    {
+        $this->userShopPreferences = $userShopPreferences;
     }
 }
 

@@ -2,6 +2,7 @@
 
 namespace ShopBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -32,10 +33,29 @@ class User implements UserInterface
     /**
      * @var string
      *
+     * @ORM\Column(name="email", type="string", length=255, unique=true)
+     */
+    private $email;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="password", type="string", length=255)
      */
     private $password;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="UserShopPreference", mappedBy = "user")
+     */
+    
+    private $userShopPreferences;
+
+
+    public function __construct()
+    {
+        $this->userShopPreferences = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -137,6 +157,38 @@ class User implements UserInterface
     public function eraseCredentials()
     {
         // TODO: Implement eraseCredentials() method.
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $email
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserShopPreferences()
+    {
+        return $this->userShopPreferences;
+    }
+
+    /**
+     * @param mixed $userShopPreferences
+     */
+    public function setUserShopPreferences($userShopPreferences)
+    {
+        $this->userShopPreferences = $userShopPreferences;
     }
 }
 
