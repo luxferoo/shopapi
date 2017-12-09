@@ -43,6 +43,13 @@ class UserService
 
     }
 
+    public function getUserId($username,$password){
+        $userRepo = $this->doctrine->getRepository(User::class);
+        $user = $userRepo->findOneBy(["username"=>$username]);
+        if(password_verify($password,$user->getPassword()))
+            return $user->getId();
+    }
+
     private function checkEmail($email)
     {
         if(!filter_var($email, FILTER_VALIDATE_EMAIL))

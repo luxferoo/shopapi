@@ -74,10 +74,53 @@ class AccessController extends Controller
         $password = 'password' ;
         $email = 'email';
         if($missingParams = $this->get('shop.request')->getParams($request,$password,$email,$username))
-            return  new MyJsonResponse( MyJsonResponse::MISSING_PARAM);
+            return  new MyJsonResponse( MyJsonResponse::MISSING_PARAM,["missing params "=>$missingParams]);
         if($res = $this->get('shop.user')->checkParams($password,$email,$username))
             return  new MyJsonResponse( MyJsonResponse::INVALID_PARAM,$res);
         $BearerToken = $this->get('shop.user')->registerUser($password,$email,$username);
+        return  new MyJsonResponse(MyJsonResponse::RSP_OK,"success",["token"=>$BearerToken]);
+    }
+
+    /**
+     * @SWG\Tag(name="SSO")
+     * @SWG\Response(
+     *     response=200,
+     *     description="successful authentication"
+     * )
+     *  @SWG\Response(
+     *     response=422,
+     *     description="Missing param"
+     * )
+     *  @SWG\Response(
+     *     response=401,
+     *     description="Unauthorized"
+     * )
+     ** @SWG\Parameter(
+     *     name="username",
+     *     in="formData",
+     *     type="string",
+     *     description="the username must be unique"
+     * )
+     * @SWG\Parameter(
+     *     name="password",
+     *     in="formData",
+     *     type="string",
+     *     description="password of the user"
+     * )
+     * @param Request $request
+     * @Route("/login", methods={"POST"})
+     *
+     * @return MyJsonResponse
+     */
+    public function ssoAction(Request $request){
+        $username = 'username' ;
+        $password = 'password' ;
+        if($missingParams = $this->get('shop.request')->getParams($request,$password,$username))
+            return  new MyJsonResponse( MyJsonResponse::MISSING_PARAM,["missing params "=>$missingParams]);
+        if(!$userId = $this->get('shop.user')->getUserId($username,$password))
+            return  new MyJsonResponse( MyJsonResponse::UNAUTHORIZED,"bad credentials");
+        $jwtService = $this->get('shop.jwt');
+        $BearerToken =$jwtService->generateToken(['id' => $userId]);
         return  new MyJsonResponse(MyJsonResponse::RSP_OK,"success",["token"=>$BearerToken]);
     }
 
