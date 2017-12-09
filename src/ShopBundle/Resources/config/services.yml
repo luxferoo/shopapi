@@ -7,3 +7,11 @@ services:
                     arguments: [ "@doctrine.orm.entity_manager"]
         shop.request:
                     class: ShopBundle\Services\RequestService
+        shop.user:
+                    class: ShopBundle\Services\UserService
+                    arguments: ["@service_container"]
+        shop.response:
+                    class: ShopBundle\Services\ResponseService
+        shop.jwt:
+                    class: ShopBundle\Security\JsonWebToken
+                    arguments: [ "@service_container"]

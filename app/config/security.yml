@@ -15,7 +15,7 @@ security:
 
     firewalls:
             authorized:
-                pattern: ^/api/login
+                pattern: ^/api/authorized
                 security: false
             api:
                 pattern: ^/api

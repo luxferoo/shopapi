@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="shop")
  * @ORM\Entity(repositoryClass="ShopBundle\Repository\ShopRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Shop
 {
@@ -36,13 +37,25 @@ class Shop
      */
     private $image;
 
-
     /**
      * @ORM\OneToMany(targetEntity="UserShopPreference", mappedBy = "shop")
      */
 
     private $userShopPreferences;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="createdAt", type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updatedAt", type="datetime")
+     */
+    private $updatedAt;
 
     public function __construct()
     {
@@ -121,6 +134,35 @@ class Shop
     public function setUserShopPreferences($userShopPreferences)
     {
         $this->userShopPreferences = $userShopPreferences;
+    }
+
+    /**
+     *
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps()
+    {
+        $this->updatedAt = new \DateTime('now');
+        if ($this->getCreatedAt() == null) {
+            $this->createdAt = new \DateTime('now');
+        }
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 }
 

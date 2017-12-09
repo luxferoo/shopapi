@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="ShopBundle\Repository\UserRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class User implements UserInterface
 {
@@ -51,11 +52,25 @@ class User implements UserInterface
     
     private $userShopPreferences;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="createdAt", type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updatedAt", type="datetime")
+     */
+    private $updatedAt;
 
     public function __construct()
     {
         $this->userShopPreferences = new ArrayCollection();
     }
+
 
     /**
      * Get id
@@ -189,6 +204,39 @@ class User implements UserInterface
     public function setUserShopPreferences($userShopPreferences)
     {
         $this->userShopPreferences = $userShopPreferences;
+    }
+    /**
+     *
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps()
+    {
+        $this->updatedAt = new \DateTime('now');
+        if ($this->getCreatedAt() == null) {
+            $this->createdAt = new \DateTime('now');
+        }
+    }
+
+    public static function getRegex()
+    {
+        return '/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/';
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
     }
 }
 

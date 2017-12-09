@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="user_shop_preference")
  * @ORM\Entity(repositoryClass="ShopBundle\Repository\UserShopPreferenceRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class UserShopPreference
 {
@@ -87,17 +88,16 @@ class UserShopPreference
     }
 
     /**
-     * Set createdAt
      *
-     * @param \DateTime $createdAt
-     *
-     * @return UserShopPreference
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
      */
-    public function setCreatedAt($createdAt)
+    public function updatedTimestamps()
     {
-        $this->createdAt = $createdAt;
-
-        return $this;
+        $this->updatedAt = new \DateTime('now');
+        if ($this->getCreatedAt() == null) {
+            $this->createdAt = new \DateTime('now');
+        }
     }
 
     /**
@@ -110,19 +110,7 @@ class UserShopPreference
         return $this->createdAt;
     }
 
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     *
-     * @return UserShopPreference
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
 
-        return $this;
-    }
 
     /**
      * Get updatedAt
