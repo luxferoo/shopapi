@@ -1,0 +1,31 @@
+security:
+
+    encoders:
+            ShopBundle\Entity\User: bcrypt
+            Symfony\Component\Security\Core\User\User: plaintext
+    providers:
+            shop.user_provider:
+               id: user.provider
+            in_memory:
+                        memory:
+                                users:
+                                    luxfero:
+                                        password: azerty
+                                        roles: 'ROLE_ADMIN'
+
+    firewalls:
+            authorized:
+                pattern: ^/api/login
+                security: false
+            api:
+                pattern: ^/api
+                provider: user_provider
+                guard:
+                                authenticators:
+                                    - shop.authenticator
+            main:
+                provider: in_memory
+                anonymous: ~
+                http_basic: ~
+    access_control:
+            - { path: ^/doc, role: ROLE_ADMIN }

@@ -1,0 +1,9 @@
+services:
+        shop.authenticator:
+                    class: ShopBundle\Security\TokenAuthenticator
+                    autowire: true
+        shop.user_provider:
+                    class: ShopBundle\Security\UserProvider
+                    arguments: [ "@doctrine.orm.entity_manager"]
+        shop.request:
+                    class: ShopBundle\Services\RequestService
