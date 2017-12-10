@@ -16,12 +16,14 @@ use ShopBundle\Entity\Shop;
 use ShopBundle\Entity\User;
 use ShopBundle\Entity\UserShopPreference;
 use Symfony\Component\Debug\Exception\ContextErrorException;
+use Symfony\Component\DependencyInjection\Container;
 
 class ShopService
 {
 
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManager $entityManager,Container $container)
     {
+        $this->container  = $container;
         $this->em = $entityManager;
     }
 
@@ -31,7 +33,8 @@ class ShopService
         $disliked = [];
         $now = new \DateTime('now');
         foreach ($preferences as $preference){
-            if($now->format('U') - $preference->getUpdatedAt()->format('U') < 7200)
+            if($now->format('U') - $preference->getUpdatedAt()->format('U')
+                    < $this->container->getParameter('disliked_timeout'))
                 $disliked[] = $preference->getShop()->getId();
         }
         $shopRepo =$this->em->getRepository(Shop::class);

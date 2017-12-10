@@ -17,4 +17,4 @@ services:
                     arguments: [ "@service_container"]
         shop.shop:
                     class: ShopBundle\Services\ShopService
-                    arguments: [ "@doctrine.orm.entity_manager"]
+                    arguments: [ "@doctrine.orm.entity_manager","@service_container"]

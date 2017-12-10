@@ -85,3 +85,5 @@ lexik_jwt_authentication:
     public_key_path:  "%kernel.root_dir%/../var/jwt/public.pem"
     pass_phrase:      %jwt_passphrase%
     token_ttl:        %jwt_token_ttl%
+shop:
+    disliked_timeout: 7200 #seconds 7200 => 2hours
