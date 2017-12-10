@@ -2,6 +2,7 @@
 /app/config/parameters.yml
 /build/
 /phpunit.xml
+/jwt/*
 /var/*
 !/var/cache
 /var/cache/*
@@ -15,3 +16,4 @@
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
+/.idea
