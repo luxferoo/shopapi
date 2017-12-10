@@ -9,8 +9,11 @@
 namespace ShopBundle\Controller;
 
 
+use ShopBundle\Entity\Shop;
+use ShopBundle\Entity\UserShopPreference;
 use ShopBundle\Services\MyJsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Swagger\Annotations as SWG;
 
@@ -31,9 +34,47 @@ class ShopController extends Controller
      * )
      *
      * */
-    public function getShopsAction(){
+    public function getShopsAction(Request $request){
         $shops = $this->get('shop.shop')->getShopsForUser($this->getUser());
         return new MyJsonResponse(MyJsonResponse::RSP_OK,null,["shops"=>$shops]);
     }
 
+    /**
+     * @Route("/preference/{shopId}", methods={"PATCH"})
+     * @SWG\Tag(name="Shop")
+     * @SWG\Response(
+     *     response=200,
+     *     description="Action done"
+     * )
+     *  @SWG\Response(
+     *     response=422,
+     *     description="missing parameter | invalid value for action"
+     * )
+     * @SWG\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     description="user bearer token"
+     * )
+     * @SWG\Parameter(
+     *     name="action",
+     *     in="formData",
+     *     type="string",
+     *     description="LIKE | DISLIKE"
+     * )
+     * @param Request $request
+     * @return MyJsonResponse
+     */
+
+    public function patchPreferenceAction(Request $request){
+        $shopId ='shopId';
+        $action ='action';
+        if($missingParams = $this->get('shop.request')->getParams($request,$shopId,$action))
+            return  new MyJsonResponse( MyJsonResponse::MISSING_PARAM,["missing params "=>$missingParams]);
+        if($action != UserShopPreference::LIKE && $action != UserShopPreference::DISLIKE)
+            return  new MyJsonResponse( MyJsonResponse::INVALID_PARAM,"unknown action");
+        if(!$this->get('shop.shop')->updateShopPreference($this->getUser(),$shopId,$action))
+            return new MyJsonResponse(MyJsonResponse::RESOURCE_NOT_FOUND,"no shop found with this id");
+        return new MyJsonResponse(MyJsonResponse::RSP_OK,"done");
+    }
 }

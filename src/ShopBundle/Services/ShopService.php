@@ -10,9 +10,12 @@ namespace ShopBundle\Services;
 
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMInvalidArgumentException;
+use ErrorException;
 use ShopBundle\Entity\Shop;
 use ShopBundle\Entity\User;
 use ShopBundle\Entity\UserShopPreference;
+use Symfony\Component\Debug\Exception\ContextErrorException;
 
 class ShopService
 {
@@ -43,6 +46,27 @@ class ShopService
                 ];
         }
         return $shops1;
+    }
+
+    public function updateShopPreference($user,$shopId,$action){
+        $prefRepo = $this->em->getRepository(UserShopPreference::class);
+        $shopRepo = $this->em->getRepository(Shop::class);
+        $shop = $shopRepo->findOneBy(["id"=>$shopId]);
+        if(!$shop)
+            return false;
+        $preference = $prefRepo->findOneBy(["user"=>$user->getId(),"shop"=>$shopId]);
+        if($preference)
+            $preference->setAction($action);
+        else{
+            $preference = new UserShopPreference();
+            $preference->setAction($action);
+            $preference->setUser($user);
+            $preference->setShop($shop);
+        }
+            $this->em->persist($preference);
+            $this->em->flush();
+            return true;
+
     }
 
 }
