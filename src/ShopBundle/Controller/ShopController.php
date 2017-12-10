@@ -11,7 +11,7 @@ namespace ShopBundle\Controller;
 
 use ShopBundle\Entity\Shop;
 use ShopBundle\Entity\UserShopPreference;
-use ShopBundle\Services\MyJsonResponse;
+use ShopBundle\Utilities\MyJsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -67,14 +67,17 @@ class ShopController extends Controller
      */
 
     public function patchPreferenceAction(Request $request){
+        $serviceTranslator = $this->container->get('translator');
         $shopId ='shopId';
         $action ='action';
         if($missingParams = $this->get('shop.request')->getParams($request,$shopId,$action))
             return  new MyJsonResponse( MyJsonResponse::MISSING_PARAM,["missing params "=>$missingParams]);
         if($action != UserShopPreference::LIKE && $action != UserShopPreference::DISLIKE)
-            return  new MyJsonResponse( MyJsonResponse::INVALID_PARAM,"unknown action");
+            return  new MyJsonResponse( MyJsonResponse::INVALID_PARAM,
+                $serviceTranslator->trans("preference.unknown_action",[],"messages"));
         if(!$this->get('shop.shop')->updateShopPreference($this->getUser(),$shopId,$action))
             return new MyJsonResponse(MyJsonResponse::RESOURCE_NOT_FOUND,"no shop found with this id");
-        return new MyJsonResponse(MyJsonResponse::RSP_OK,"done");
+        return new MyJsonResponse(MyJsonResponse::RSP_OK,
+            $serviceTranslator->trans("preference.preference_state_changed",[],"messages"));
     }
 }

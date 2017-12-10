@@ -11,7 +11,7 @@ namespace ShopBundle\Controller;
 
 use Doctrine\DBAL\Exception\NotNullConstraintViolationException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use ShopBundle\Services\MyJsonResponse;
+use ShopBundle\Utilities\MyJsonResponse;
 use Swagger\Annotations as SWG;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,6 +65,7 @@ class AccessController extends Controller
      * @return MyJsonResponse
      */
     public function registerUserAction(Request $request){
+        $serviceTranslator = $this->container->get('translator');
         /* List of expected parameters .
          * available prefixes [file,header]
          * getParams(Request $request, &...$params)
@@ -78,7 +79,8 @@ class AccessController extends Controller
         if($res = $this->get('shop.user')->checkParams($password,$email,$username))
             return  new MyJsonResponse( MyJsonResponse::INVALID_PARAM,$res);
         $BearerToken = $this->get('shop.user')->registerUser($password,$email,$username);
-        return  new MyJsonResponse(MyJsonResponse::RSP_OK,"success",["token"=>$BearerToken]);
+        return  new MyJsonResponse(MyJsonResponse::RSP_OK,
+            $serviceTranslator->trans("user.success_registration", array(), "messages"),["token"=>$BearerToken]);
     }
 
     /**
@@ -113,15 +115,18 @@ class AccessController extends Controller
      * @return MyJsonResponse
      */
     public function ssoAction(Request $request){
+        $serviceTranslator = $this->container->get('translator');
         $username = 'username' ;
         $password = 'password' ;
         if($missingParams = $this->get('shop.request')->getParams($request,$password,$username))
             return  new MyJsonResponse( MyJsonResponse::MISSING_PARAM,["missing params "=>$missingParams]);
         if(!$userId = $this->get('shop.user')->getUserId($username,$password))
-            return  new MyJsonResponse( MyJsonResponse::UNAUTHORIZED,"bad credentials");
+            return  new MyJsonResponse( MyJsonResponse::UNAUTHORIZED,
+                $serviceTranslator->trans("common.bad_credentials",[],"messages"));
         $jwtService = $this->get('shop.jwt');
         $BearerToken =$jwtService->generateToken(['id' => $userId]);
-        return  new MyJsonResponse(MyJsonResponse::RSP_OK,"success",["token"=>$BearerToken]);
+        return  new MyJsonResponse(MyJsonResponse::RSP_OK,
+            $serviceTranslator->trans("user.success_sso",[],"messages"),["token"=>$BearerToken]);
     }
 
 

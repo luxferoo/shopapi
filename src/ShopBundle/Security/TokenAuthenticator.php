@@ -2,7 +2,7 @@
 
 namespace ShopBundle\Security;
 
-use ShopBundle\Services\MyJsonResponse;
+use ShopBundle\Utilities\MyJsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

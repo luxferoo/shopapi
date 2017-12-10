@@ -13,7 +13,7 @@ parameters:
 
 framework:
     #esi: ~
-    #translator: { fallbacks: ['%locale%'] }
+    translator: { fallbacks: ['%locale%'] }
     secret: '%secret%'
     router:
         resource: '%kernel.project_dir%/app/config/routing.yml'
@@ -81,7 +81,7 @@ nelmio_api_doc:
                 description: List of shop api routes
                 version: 1.0.0
 lexik_jwt_authentication:
-    private_key_path: "%kernel.root_dir%/../app/jwt/private.pem"
-    public_key_path:  "%kernel.root_dir%/../app/jwt/public.pem"
+    private_key_path: "%kernel.root_dir%/../var/jwt/private.pem"
+    public_key_path:  "%kernel.root_dir%/../var/jwt/public.pem"
     pass_phrase:      %jwt_passphrase%
     token_ttl:        %jwt_token_ttl%

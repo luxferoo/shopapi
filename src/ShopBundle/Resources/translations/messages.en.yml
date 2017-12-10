@@ -1,0 +1,8 @@
+user:
+    success_registration: registred successfully
+    success_sso: authentication succeeded
+common:
+    bad_credentials: bad credentials
+preference:
+    unknown_action: unknown action
+    preference_state_changed: preference state changed

@@ -6,7 +6,7 @@
  * Time: 5:51 PM
  */
 
-namespace ShopBundle\Services;
+namespace ShopBundle\Utilities;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 

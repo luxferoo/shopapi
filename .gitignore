@@ -2,8 +2,9 @@
 /app/config/parameters.yml
 /build/
 /phpunit.xml
-/jwt/*
 /var/*
+!/var/jwt
+/var/jwt/*
 !/var/cache
 /var/cache/*
 !var/cache/.gitkeep
