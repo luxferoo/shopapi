@@ -13,6 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class UserShopPreference
 {
+    const DISLIKE = "DISLIKE";
+    const LIKE = "LIKE";
+
     /**
      * @var string
      *

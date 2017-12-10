@@ -2,6 +2,7 @@
 
 namespace ShopBundle\Security;
 
+use ShopBundle\Services\MyJsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 
 class TokenAuthenticator extends AbstractGuardAuthenticator
 {
-    public function __construct( JsonWebToken $jsonWebToken, Container $container)
+    public function __construct(JsonWebToken $jsonWebToken, Container $container)
     {
         $this->container  = $container;
         $this->jwtWebToken = $jsonWebToken;
@@ -37,13 +38,13 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
+
         $token = $credentials['token'];
         if (null === $token) {
             return;
         }
         $data = $this->jwtWebToken->decodeToken($token);
         $idUser = isset($data['id']) ? $data['id'] : '';
-
 
         if(empty($idUser)){
             return;
@@ -54,9 +55,6 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-
-         if($user->getBearerToken() != 'Bearer '.$credentials['token'])
-             return false;
          return true;
     }
 
@@ -68,8 +66,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-
-        return new JsonResponse("nop",331);
+        return new MyJsonResponse(MyJsonResponse::RSP_EXPIRED_SESSION,"expired session");
     }
 
     /**

@@ -15,3 +15,6 @@ services:
         shop.jwt:
                     class: ShopBundle\Security\JsonWebToken
                     arguments: [ "@service_container"]
+        shop.shop:
+                    class: ShopBundle\Services\ShopService
+                    arguments: [ "@doctrine.orm.entity_manager"]
