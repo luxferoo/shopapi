@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: SoufianLa
- * Date: 20/10/2017
- * Time: 09:31
- */
 
 namespace ShopBundle\Security;
 
@@ -50,12 +44,7 @@ class JsonWebToken
      */
     public function decodeToken($token)
     {
-        try{
-            $data = $this->container->get('lexik_jwt_authentication.encoder')->decode($token);
-           // var_dump($data);
-        }catch(\Exception $e){
-            $data = null;
-        }
-        return $data;
+            return $this->container->get('lexik_jwt_authentication.encoder')->decode($token);
+          
     }
 }
