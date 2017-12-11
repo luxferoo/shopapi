@@ -43,7 +43,11 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         if (null === $token) {
             return;
         }
-        $data = $this->jwtWebToken->decodeToken($token);
+        try{
+            $data = $this->jwtWebToken->decodeToken($token);
+        }catch(\Exception $e){
+            $data = null;
+        }
         $idUser = isset($data['id']) ? $data['id'] : '';
 
         if(empty($idUser)){
