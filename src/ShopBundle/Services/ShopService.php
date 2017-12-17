@@ -50,6 +50,19 @@ class ShopService
         }
         return $shops1;
     }
+    public function getLikedShopsForUser(User $user){
+        $userShopPrefRepo =$this->em->getRepository(UserShopPreference::class);
+        $preferences =$userShopPrefRepo->findBy(["user"=>$user->getId(),"action"=>UserShopPreference::LIKE]);
+        $shops=[];
+        foreach ($preferences as $preference){
+            $shops[]= [
+                "id"=>$preference->getShop()->getId(),
+                "name"=>$preference->getShop()->getName(),
+                "image"=>$preference->getShop()->getImage(),
+            ];
+        }
+        return $shops;
+    }
 
     public function updateShopPreference($user,$shopId,$action){
         $prefRepo = $this->em->getRepository(UserShopPreference::class);

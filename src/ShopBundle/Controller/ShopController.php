@@ -80,4 +80,24 @@ class ShopController extends Controller
         return new MyJsonResponse(MyJsonResponse::RSP_OK,
             $serviceTranslator->trans("preference.preference_state_changed",[],"messages"));
     }
+
+    /**
+     * @Route("/liked-shops", methods={"GET"})
+     * @SWG\Tag(name="Shop")
+     * @SWG\Response(
+     *     response=200,
+     *     description="Liked shops list"
+     * )
+     * @SWG\Parameter(
+     *     name="Authorization",
+     *     in="header",
+     *     type="string",
+     *     description="user bearer token"
+     * )
+     *
+     * */
+    public function getLikedShopsAction(Request $request){
+        $shops = $this->get('shop.shop')->getLikedShopsForUser($this->getUser());
+        return new MyJsonResponse(MyJsonResponse::RSP_OK,null,["shops"=>$shops]);
+    }
 }
