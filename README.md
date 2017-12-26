@@ -36,7 +36,7 @@ I added 2 bundles in the project :
 LexikJWTAuthenticationBundle : for JWT generation and NelmioApiDocBundle : for the api doc.
 at root project
 ```command
-$ composer.phar install
+$ composer install
 ```
 ### JWT configuration :
 put your own passphrase and ttl (for token expiration)
