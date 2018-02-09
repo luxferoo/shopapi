@@ -10,15 +10,13 @@ services:
         shop.user:
                     class: ShopBundle\Services\UserService
                     arguments: ["@service_container"]
-        shop.response:
-                    class: ShopBundle\Services\ResponseService
         shop.jwt:
                     class: ShopBundle\Security\JsonWebToken
                     arguments: [ "@service_container"]
         shop.shop:
                     class: ShopBundle\Services\ShopService
                     arguments: [ "@doctrine.orm.entity_manager","@service_container"]
-        kernel.listener.updateHeader:
+        kernel.listener.update_header:
                     class: ShopBundle\Services\RequestListener
                     tags:
                     - { name: kernel.event_listener, event: kernel.request ,method: onKernelRequest , priority: 300 }

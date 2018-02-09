@@ -40,7 +40,7 @@ class ShopController extends Controller
     }
 
     /**
-     * @Route("/preference/{shopId}", methods={"PATCH"})
+     * @Route("/preference/{shopId}", methods={"PUT"})
      * @SWG\Tag(name="Shop")
      * @SWG\Response(
      *     response=200,

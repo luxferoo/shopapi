@@ -28,7 +28,7 @@ class AccessController extends Controller
 {
 
     /**
-     * @Route("/register", methods={"PUT"})
+     * @Route("/register", methods={"POST"})
      * @SWG\Response(
      *     response=200,
      *     description="User registered"
