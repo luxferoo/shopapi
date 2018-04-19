@@ -1,7 +1,6 @@
 shop_be
 =======
 
-ReactJS client : https://github.com/luxferoo/shopclient
 
 This API will provide to the client (Mobile,Web app) the possibility to :
 
